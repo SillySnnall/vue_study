@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>vue学习</title>
+    <style>
+        .isActive{
+            color: green;
+        }
+        .isError{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>{{message}}{{num+1}}</h1>
+    <h2>{{reversedMessage}}</h2>
+    <div>
+<!--        <a v-bind:href="href" v-bind:data-id="message">百度</a>-->
+        <a :href="href" :data-id="message" :class="['aaa',message,{'isActive':see,'isError':!see}]" :style="[style1,style2]">百度</a>
+    </div>
+    <div>
+        <h1>条件渲染</h1>
+        <div v-if="see">if true</div>
+        <div v-else>if false</div>
+        <div v-show="see">show true</div>
+        <ul>
+            <li v-for="(item,index) in persons">
+                index:{{index+1}}-i am {{item.name}},i am{{item.age}}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(item,index) in newPersons">
+                index:{{index+1}}-i am {{item.name}},i am{{item.age}}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(item,name) in obj">
+                {{item}}:{{name}}
+            </li>
+        </ul>
+        <div>
+            <h1>v-on</h1>
+<!--            <button v-on:click="clickfn('hello')">click me</button>-->
+            <button @click="clickfn('hello')">click me</button>
+            <input v-on:input="clickfn" type="text" v-model="textVal">{{textVal}}
+            <div>
+                <input type="radio" value="0" id="a" v-model="radioVal"/><label for="a">A</label>
+                <input type="radio" value="1" id="b" v-model="radioVal"/><label for="b">B</label>
+                <input type="radio" value="2" id="c" v-model="radioVal"/><label for="c">C</label>
+                {{radioVal}}
+            </div>
+
+            <div>
+                <input type="checkbox" value="0" id="d" v-model="checkboxVal"/><label for="d">D</label>
+                <input type="checkbox" value="1" id="e" v-model="checkboxVal"/><label for="e">E</label>
+                <input type="checkbox" value="2" id="f" v-model="checkboxVal"/><label for="f">F</label>
+                {{checkboxVal}}
+            </div>
+            <div>
+                <select v-model="selectVal">
+                    <option value="0">A</option>
+                    <option value="1">B</option>
+                    <option value="2">C</option>
+                </select>
+                {{selectVal}}
+            </div>
+        </div>
+        <div>
+            question: <input type="text" placeholder="enter" v-model="question"/>
+            answer:{{answer}}
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            style1:{fontSize:'20px',background:'yellow'},
+            style2:{color:'#000'},
+            question:'',
+            answer:'no answer',
+            textVal:'',
+            radioVal:'',
+            checkboxVal:[],
+            selectVal:'0',
+            href: 'http://www.baidu.com',
+            message: 'hello vue',
+            num: 1,
+            see: true,
+            persons: [
+                {name: '1', age: '12'},
+                {name: '2', age: '13'},
+                {name: '3', age: '14'}
+            ],
+            obj: {name: '3', age: '14'}
+        },
+        methods:{
+          clickfn:function (val) {
+              this.see=!this.see
+              // alert(val)
+          }
+        },
+        computed:{
+            reversedMessage:function () {
+                // 切割为数组、数组反转、数组拼接
+                return this.message.split('').reverse().join('')
+            },
+            newPersons:function () {
+                return this.persons.filter(function (item) {
+                    // 显示年龄大于13的item
+                    return item.age > 13
+                })
+            }
+        },
+        watch:{
+            // 监听函数，当question改变时会调用此方法
+            question: function () {
+                this.answer = 'waiting';
+                var _this = this;
+                setTimeout(function () {
+                    _this.answer = '404'
+                },1000)
+            }
+        }
+    })
+</script>
+</html>
